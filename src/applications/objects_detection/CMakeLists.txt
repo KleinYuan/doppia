@@ -75,7 +75,7 @@ set(local_INCLUDE_DIRS
   "/users/visics/mmathias/no_backup/usr/local/include"
   "/usr/include/eigen2/"
    "/usr/local/include/eigen2"
-   "/usr/local/cuda-5.5/include"
+   "/usr/local/cuda-8.0/include"
    ${CUDA_INCLUDE_DIRS}
 )
 
