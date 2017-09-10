@@ -28,7 +28,7 @@ Dependencies | Version | Installation |
 --- | --- | --- 
 CUDA | 8.0 | Follow this [procedures](https://github.com/KleinYuan/easy-yolo#b-environment-gpu) |
 OpenCV | 2.4.13 | Run this [script](https://github.com/KleinYuan/doppia/blob/master/dependencies/opencv_install.sh)
-Protobuf | latest | Run this [script](https://github.com/KleinYuan/doppia/blob/master/dependencies/protobuf_install.sh.sh)
+Protobuf | latest | Run this [script](https://github.com/KleinYuan/doppia/blob/master/dependencies/protobuf_install.sh)
 All boost libraries | latest | `sudo apt-get install libboost-dev`  
 libjpeg | latest | `sudo apt-get install libjpeg-dev`
 libpng | latest | `sudo apt-get install libpng-dev`
