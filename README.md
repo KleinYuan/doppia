@@ -5,23 +5,23 @@ Doppia is a collection of several research publications and original [repo](http
 
 # Machine Setup
 
--[X] Ubuntu (preferred)
+- [X] Ubuntu (preferred)
 
--[X] GPU hardware
+- [X] GPU hardware
 
--[X] CUDA with capacity to be higher than 2.0
+- [X] CUDA with capacity to be higher than 2.0
 
--[X] All boost libraries
+- [X] All boost libraries
 
--[X] Google protocol buffer
+- [X] Google protocol buffer
 
--[X] OpenCV 2.4 (3.0 is not supported yet)
+- [X] OpenCV 2.4 (3.0 is not supported yet)
 
--[X] libjpeg, libpng
+- [X] libjpeg, libpng
 
--[X] libSDL
+- [X] libSDL
 
--[X] CMAKE >= 2.4.3
+- [X] CMAKE >= 2.4.3
 
 
 Dependencies | Version | Installation |
