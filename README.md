@@ -34,7 +34,10 @@ libjpeg | latest | `sudo apt-get install libjpeg-dev`
 libpng | latest | `sudo apt-get install libpng-dev`
 libSDL | latest | `sudo apt-get install libSDL-dev`
 
+
+
 # Compile and Run Demo
+
 
 The code includes many applications and they all locate under `src/applications`.
 
@@ -46,7 +49,19 @@ Then run following script to ensure the protocol buffer files match the version 
 generate_protocol_buffer_files.sh
 ```
 
-### 1-a. CPU Only code
+### 0. Summary
+
+
+Basically, this is a project based on C++, meaning, how it works is that you need to 1) compile the code and obtain an executable, 2) config parameters and run executable against input.
+
+Therefore, we describe compile (ground_estimation/stixel_world as CPU only example and object_detection as GPU example) first then how to run the demo.
+
+
+### 1. Compile
+
+
+#### 1.1 CPU Only Compile
+
 
 Example for ground_estimation app
 
@@ -65,7 +80,8 @@ cd doppia/src/applications/stixel_world
 cmake . && make -j2 
 ```
 
-### 1-b. GPU code
+#### 1.2 GPU Compile
+
 
 object_detection is build in a way to work with GPU
 
@@ -78,13 +94,17 @@ cmake -D CMAKE_BUILD_TYPE=RelWithDebInfo -D USE_GPU=ON . && make -j2
 ### 2. Run Demo
 
 
+
 #### 2.1 Run Ground Estimation Demos
+
 
 ```
 ./ground_estimation -c test.config.ini
 ```
 
+
 #### 2.2 Run Stixel World Demos
+
 
 ```
 # Demo 1
@@ -96,7 +116,9 @@ OMP_NUM_THREADS=4 ./stixel_world -c fast.config.ini --gui.disable false
 OMP_NUM_THREADS=4 ./stixel_world -c fast_uv.config.ini --gui.disable false
 ```
 
+
 #### 2.3 Run Object Detection Demos
+
 
 ```
 # Demo 1
@@ -118,7 +140,9 @@ OMP_NUM_THREADS=4 ./objects_detection -c cvpr2012_chnftrs_over_bahnhof.config.in
 ./objects_detection -c eccv2014_face_detection_pascal.config.ini --gui.disable false
 ```
 
+
 #### 2.4 Summary
+
 
 So basically, after compile an app, you just need to define a config file with format like `*.config.ini` and use `object_detection` executable to run against it.
 
@@ -127,9 +151,13 @@ For example, `pedestrians detection` has an example config [file](https://github
 For more details, you can run `./object_detection --help` to see all the options.
 
 
+
+
 ### 3. Modifications
 
-1. OpenCV issues
+
+
+#### 3.1 OpenCV issues
 
 Due to some OpenCV linking issues originally potentially from wrong order of linking lib, we have a fix for compiling apps by commenting out following in all `CMakeLists.txt`. (Original issue discussion can be found [here](https://bitbucket.org/rodrigob/doppia/issues/135/ground_estimation-linking-problems)).
 
@@ -152,7 +180,9 @@ ground_estimation | [line_40](https://github.com/KleinYuan/doppia/blob/master/sr
 stixel_world | [line_40](https://github.com/KleinYuan/doppia/blob/master/src/applications/stixel_world/CMakeLists.txt#L40)
 object_detection | [line_42](https://github.com/KleinYuan/doppia/blob/master/src/applications/objects_detection/CMakeLists.txt#L42)
 
-2. CUDA modifications
+
+
+#### 3.2 CUDA modifications
 
 You need to modify the cuda path with correct version on your machine and in here, the changes are below and original discussions can be found [here](https://bitbucket.org/rodrigob/doppia/issues/80/gpuveryfastintegralchannelsdetector):
 
