@@ -2,6 +2,51 @@
 
 Doppia is a collection of several research publications and original [repo](https://bitbucket.org/rodrigob/doppia) is hosted on bitbucket. 
 
+# Docker Run
+
+Well, if you are too lazy to read this whole readme, going through all the deatils of setting up the machine, compile the C++ applications and run demo with various flags, fine, I made a docker version for you to just execute 2 lines of code doing everything for you:
+
+```
+# First of all, git clone this repo and in here we assume, you navigated to the root of this repo
+# Then, just simply build the docker image by running
+
+make build
+
+# Then, it will take a while and build a docker image at around 8 GB, thanks for opencv, then you just simply run it
+
+make run
+
+```
+
+And then, it will spin up a container with ground_estimation app compiled. You can run the demo by:
+
+
+```
+./ground_estimation -c test.config.ini --gui.disable true
+
+```
+
+Then you are supposed to see logs below:
+
+```
+Ground estimation. Rodrigo Benenson @ KULeuven. 2010-2011.
+Parsed the configuration file test.config.ini
+Creating new log file stixel_world.out.txt
+Using stereo camera calibration file: ../../video_input/calibration/stereo_calibration_bahnhof.proto.txt
+2017-09-11 08:46:07 {7f388f16f800} [ StereoCameraCalibration ] : stereo_calibration_data name: Andreas Ess Bahnhofstrasse sequence stereo calibration
+Reading files:
+../../../data/sample_test_images/bahnhof/image_00000000_0.png
+../../../data/sample_test_images/bahnhof/image_00000000_1.png
+Average iteration speed  39.3800 [Hz]  (in the last 10 iterations)
+Requested frame number 11 but frames should be in range (0, 10)
+Processed a total of 10 input frames
+End of game, have a nice day.
+```
+
+It means you are successfully running the demo.
+
+If you wanna do more, then continue within this docker container and I strongly suggest you also read rest of the readme to get a better idea.
+
 
 # Machine Setup
 
@@ -54,7 +99,7 @@ generate_protocol_buffer_files.sh
 
 Basically, this is a project based on C++, meaning, how it works is that you need to 1) compile the code and obtain an executable, 2) config parameters and run executable against input.
 
-Therefore, we describe compile (ground_estimation/stixel_world as CPU only example and object_detection as GPU example) first then how to run the demo.
+Therefore, we describe compile (ground_estimation/stixel_world as CPU only example and objects_detection as GPU example) first then how to run the demo.
 
 
 ### 1. Compile
@@ -83,7 +128,7 @@ cmake . && make -j2
 #### 1.2 GPU Compile
 
 
-object_detection is build in a way to work with GPU
+objects_detection is build in a way to work with GPU
 
 ```
 cd doppia/src/applications/objects_detection
@@ -144,13 +189,20 @@ OMP_NUM_THREADS=4 ./objects_detection -c cvpr2012_chnftrs_over_bahnhof.config.in
 #### 2.4 Summary
 
 
-So basically, after compile an app, you just need to define a config file with format like `*.config.ini` and use `object_detection` executable to run against it.
+So basically, after compile an app, you just need to define a config file with format like `*.config.ini` and use `objects_detection` executable to run against it.
 
 For example, `pedestrians detection` has an example config [file](https://github.com/KleinYuan/doppia/blob/master/src/applications/objects_detection/cvpr2012_inria_pedestrians.config.ini) and in this file, you can define whether you wanna input from directory or camera, scales, stride, mask, ...etc. For the example config of pedestrians detection, the input is sourced from [directory](https://github.com/KleinYuan/doppia/tree/master/data/sample_test_images/inria), which you can also easily define your own ones.
 
-For more details, you can run `./object_detection --help` to see all the options.
+For more details, you can run `./objects_detection --help` to see all the options.
 
+For example, if you want to save the detections and save screenshots into local folder then you can use `--save_detections and --gui.save_all_screenshots` flags:
 
+```
+./objects_detection -c ***.ini --save_detection=1 --gui.disable=false --gui.save_all_screenshots=1
+
+```
+
+You can find the detailed info by running `./objects_detection --help`
 
 
 ### 3. Modifications
@@ -178,7 +230,7 @@ Name | Line |
 --- | --- 
 ground_estimation | [line_40](https://github.com/KleinYuan/doppia/blob/master/src/applications/ground_estimation/CMakeLists.txt#L40)
 stixel_world | [line_40](https://github.com/KleinYuan/doppia/blob/master/src/applications/stixel_world/CMakeLists.txt#L40)
-object_detection | [line_42](https://github.com/KleinYuan/doppia/blob/master/src/applications/objects_detection/CMakeLists.txt#L42)
+objects_detection | [line_42](https://github.com/KleinYuan/doppia/blob/master/src/applications/objects_detection/CMakeLists.txt#L42)
 
 
 
@@ -188,11 +240,11 @@ You need to modify the cuda path with correct version on your machine and in her
 
 - [X] Replacing all `cuda-5.5` with `cuda-8.0` since that's what I tested (you may have a different version and check by `ls /usr/local | grep cuda`)
 
-- [X] Replacing all `cuda-5.5` in all related CMakeList.txt, for example in [object_detection](https://github.com/KleinYuan/doppia/blob/master/src/applications/objects_detection/CMakeLists.txt#L78)
+- [X] Replacing all `cuda-5.5` in all related CMakeList.txt, for example in [objects_detection](https://github.com/KleinYuan/doppia/blob/master/src/applications/objects_detection/CMakeLists.txt#L78)
 
-- [X] Adding `USE_GPU` flag in object_detection [CMakeList.txt](https://github.com/KleinYuan/doppia/blob/master/src/applications/objects_detection/CMakeLists.txt#L32)
+- [X] Adding `USE_GPU` flag in objects_detection [CMakeList.txt](https://github.com/KleinYuan/doppia/blob/master/src/applications/objects_detection/CMakeLists.txt#L32)
 
-- [X] Indexing CUDA arch specifically in object_detection [CMakeList.txt](https://github.com/KleinYuan/doppia/blob/master/src/applications/objects_detection/CMakeLists.txt#L59) and make sure that the arch is the one your host machine is compatible, otherwise you may still be able to compile but throw errors
+- [X] Indexing CUDA arch specifically in objects_detection [CMakeList.txt](https://github.com/KleinYuan/doppia/blob/master/src/applications/objects_detection/CMakeLists.txt#L59) and make sure that the arch is the one your host machine is compatible, otherwise you may still be able to compile but throw errors
 
-- [X] Enforce object_detection to be build with GPU ON by adding flag in cmake [command](https://github.com/KleinYuan/doppia#gpu-code)
+- [X] Enforce objects_detection to be build with GPU ON by adding flag in cmake [command](https://github.com/KleinYuan/doppia#gpu-code)
 
