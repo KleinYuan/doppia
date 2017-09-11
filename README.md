@@ -34,7 +34,7 @@ libjpeg | latest | `sudo apt-get install libjpeg-dev`
 libpng | latest | `sudo apt-get install libpng-dev`
 libSDL | latest | `sudo apt-get install libSDL-dev`
 
-# Compile
+# Compile and Run Demo
 
 The code includes many applications and they all locate under `src/applications`.
 
@@ -46,7 +46,7 @@ Then run following script to ensure the protocol buffer files match the version 
 generate_protocol_buffer_files.sh
 ```
 
-### 1. CPU Only code
+### 1-a. CPU Only code
 
 Example for ground_estimation app
 
@@ -56,37 +56,76 @@ cd doppia/src/applications/ground_estimation
 
 # Compile
 cmake -D CMAKE_BUILD_TYPE=RelWithDebInfo . && make -j2
-
-# Run Demo
-cmake . && make -j2 && ./ground_estimation -c test.config.ini
 ```
 
 Example for stixel_world
 
 ```
 cd doppia/src/applications/stixel_world
-cmake . && make -j2 && OMP_NUM_THREADS=4 ./stixel_world -c fast.config.ini --gui.disable false
-cmake . && make -j2 && OMP_NUM_THREADS=4 ./stixel_world -c fast_uv.config.ini --gui.disable false
+cmake . && make -j2 
 ```
 
-### 2. GPU code
+### 1-b. GPU code
 
 object_detection is build in a way to work with GPU
 
 ```
 cd doppia/src/applications/objects_detection
 cmake -D CMAKE_BUILD_TYPE=RelWithDebInfo -D USE_GPU=ON . && make -j2
-cmake . && make -j2 && OMP_NUM_THREADS=4 ./objects_detection -c cvpr2012_very_fast_over_bahnhof.config.ini --gui.disable false
-
-# Demo1
-cmake . && make -j2 && OMP_NUM_THREADS=4 ./objects_detection -c cvpr2012_inria_pedestrians.config.ini --gui.disable false
-
-# Demo2
-cmake . && make -j2 && OMP_NUM_THREADS=4 ./objects_detection -c cvpr2012_chnftrs_over_bahnhof.config.ini --gui.disable false
-
-# Demo3
-cmake . && make -j2 && ./objects_detection -c eccv2014_face_detection_pascal.config.ini --gui.disable false
 ```
+
+
+### 2. Run Demo
+
+
+#### 2.1 Run Ground Estimation Demos
+
+```
+./ground_estimation -c test.config.ini
+```
+
+#### 2.2 Run Stixel World Demos
+
+```
+# Demo 1
+OMP_NUM_THREADS=4 ./stixel_world -c fast.config.ini --gui.disable false
+```
+
+```
+# Demo 2
+OMP_NUM_THREADS=4 ./stixel_world -c fast_uv.config.ini --gui.disable false
+```
+
+#### 2.3 Run Object Detection Demos
+
+```
+# Demo 1
+OMP_NUM_THREADS=4 ./objects_detection -c cvpr2012_very_fast_over_bahnhof.config.ini --gui.disable false
+```
+
+```
+# Demo 2
+OMP_NUM_THREADS=4 ./objects_detection -c cvpr2012_inria_pedestrians.config.ini --gui.disable false
+```
+
+```
+# Demo 3
+OMP_NUM_THREADS=4 ./objects_detection -c cvpr2012_chnftrs_over_bahnhof.config.ini --gui.disable false
+```
+
+```
+# Demo 4
+./objects_detection -c eccv2014_face_detection_pascal.config.ini --gui.disable false
+```
+
+#### 2.4 Summary
+
+So basically, after compile an app, you just need to define a config file with format like `*.config.ini` and use `object_detection` executable to run against it.
+
+For example, `pedestrians detection` has an example config [file](https://github.com/KleinYuan/doppia/blob/master/src/applications/objects_detection/cvpr2012_inria_pedestrians.config.ini) and in this file, you can define whether you wanna input from directory or camera, scales, stride, mask, ...etc. For the example config of pedestrians detection, the input is sourced from [directory](https://github.com/KleinYuan/doppia/tree/master/data/sample_test_images/inria), which you can also easily define your own ones.
+
+For more details, you can run `./object_detection --help` to see all the options.
+
 
 ### 3. Modifications
 
